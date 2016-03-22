@@ -17,7 +17,7 @@ import { NewTaskComponent } from './new-task.component';
   </task-display>
   <edit-task-details *ngIf="selectedTask" [task]="selectedTask">
   </edit-task-details>
-  <new-task> (onSubmitNewTask)="createTask($event)"></new-task>
+  <new-task (onSubmitNewTask)="createTask($event)"></new-task>
   `
 })
 
@@ -38,5 +38,5 @@ export class TaskListComponent {
       new Task(description, this.taskList.length)
     );
   }
-  
+
 }
