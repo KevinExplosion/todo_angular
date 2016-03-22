@@ -1,16 +1,29 @@
 import { Component, EventEmitter } from 'angular2/core';
 
+@Component({
+    selector: 'task-display',
+    inputs: ['task'],
+  template:`
+  <h3>{{ task.description}}</h3>
+  `
+})
+
+export class TaskComponent {
+  public task: Task;
+}
+
 //The @Component() defining our annotation is called a decorator.
 @Component({
   selector: 'task-list',
   inputs: ['taskList'],
   outputs: ['onTaskSelect'],
+  directives: [TaskComponent],
   template: `
-  <h3 *ngFor="#currentTask of taskList"
+  <task-display *ngFor="#currentTask of taskList"
   (click)="taskClicked(currentTask)"
-  [class.selected]="currentTask === selectedTask">
-  {{ currentTask.description }}
-  </h3>
+  [class.selected]="currentTask === selectedTask"
+  [task]="currentTask">
+  </task-display>
   `
 })
 
