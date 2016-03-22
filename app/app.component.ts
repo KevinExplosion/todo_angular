@@ -1,14 +1,38 @@
-import { Component } from 'angular2/core';
+
+import { Component, EventEmitter } from 'angular2/core';
 
 //The @Component() defining our annotation is called a decorator.
 @Component({
+  selector: 'task-list',
+  inputs: ['taskList'],
+  outputs: ['onTaskSelect'],
+  template: `
+  <h3 *ngFor="#currentTask of taskList" (click)="taskClicked(currentTask)">
+    {{ currentTask.description }}
+  </h3>
+  `
+})
+export class TaskListComponent {
+  public taskList: Task[];
+  public onTaskSelect: EventEmitter<Task>;
+  constructor() {
+    this.onTaskSelect = new EventEmitter();
+  }
+  taskClicked(clickedTask: Task): void {
+    console.log('child', clickedTask);
+    this.onTaskSelect.emit(clickedTask);
+  }
+}
+@Component({
   selector: 'my-app',
+  directives: [TaskListComponent],
   template: `
   <div class="container">
     <h1>Skeleton Angular2 App!</h1>
-    <div *ngFor="#task of tasks" (click)="taskWasSelected(task)">
-      <h3>{{ task.description }}</h3>
-    </div>
+    <task-list
+     [taskList]="tasks"
+     (onTaskSelect)="taskWasSelected($event)">
+     </task-list>
   </div>
   `
 })
@@ -26,7 +50,7 @@ export class AppComponent {
   }
 //The component's class declaration holds the data and methods needed to make the template HTML functional.
   taskWasSelected(clickedTask: Task): void {
-    console.log(clickedTask);
+    console.log('parent', clickedTask);
   }
 }
 
