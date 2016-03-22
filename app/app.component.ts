@@ -6,9 +6,8 @@ import { Component } from 'angular2/core';
   template: `
   <div class="container">
     <h1>Skeleton Angular2 App!</h1>
-    <div *ngFor="#task of tasks">
+    <div *ngFor="#task of tasks" (click)="taskWasSelected(task)">
       <h3>{{ task.description }}</h3>
-        <h4> Hi, I'm another nested HTML element. There are 4 copies of me because we have 4 tasks.</h4>
     </div>
   </div>
   `
@@ -26,6 +25,9 @@ export class AppComponent {
     ];
   }
 //The component's class declaration holds the data and methods needed to make the template HTML functional.
+  taskWasSelected(clickedTask: Task): void {
+    console.log(clickedTask);
+  }
 }
 
 export class Task {
