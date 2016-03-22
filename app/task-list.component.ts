@@ -1,18 +1,23 @@
 import { Component, EventEmitter } from 'angular2/core';
 import { TaskComponent } from './task.component';
 import { Task } from './task.model';
+import { EditTaskDetailsComponent } from './edit-task-details.component';
+import { NewTaskComponent } from './new-task.component';
 //The @Component() defining our annotation is called a decorator.
 @Component({
   selector: 'task-list',
   inputs: ['taskList'],
   outputs: ['onTaskSelect'],
-  directives: [TaskComponent],
+  directives: [TaskComponent, EditTaskDetailsComponent, NewTaskComponent],
   template: `
   <task-display *ngFor="#currentTask of taskList"
-  (click)="taskClicked(currentTask)"
-  [class.selected]="currentTask === selectedTask"
-  [task]="currentTask">
+    (click)="taskClicked(currentTask)"
+    [class.selected]="currentTask === selectedTask"
+    [task]="currentTask">
   </task-display>
+  <edit-task-details *ngIf="selectedTask" [task]="selectedTask">
+  </edit-task-details>
+  <new-task> (onSubmitNewTask)="createTask($event)"></new-task>
   `
 })
 
@@ -28,4 +33,10 @@ export class TaskListComponent {
     this.selectedTask = clickedTask;
     this.onTaskSelect.emit(clickedTask);
   }
+  createTask(description: string): void {
+    this.taskList.push(
+      new Task(description, this.taskList.length)
+    );
+  }
+  
 }
